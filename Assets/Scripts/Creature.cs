@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
@@ -9,6 +10,7 @@ public class Creature : MonoBehaviour
     //This class contains all the methods and declaration associated with any creature
     //Examples of Creatures: The Player, Enemies, Bosses
     
+    [Header("Combat")]
     //The amount of HP a creature has
     public float hitPoints;
 
@@ -20,6 +22,11 @@ public class Creature : MonoBehaviour
     public DamageTypes[] vulnerabilities;
     //If a creature is immune, they take none of the damage
     public DamageTypes[] immunities;
+    
+    //This game may play with Gravity fields and directions, as such every creature needs to consider the direction of gravity.
+    [Header("Gravity")] 
+    //This vector stores the current direction of the gravity.
+    public Vector2 gravityDirection;
 
     //Changes the HP of a creature; if the amount reduces the creature to zero, kill the creature
     public void ChangeHitPoints(int amount, DamageTypes type)
@@ -64,5 +71,15 @@ public class Creature : MonoBehaviour
     {
         //More elegantly later, currently it simply deletes the creature
         Destroy(gameObject);
+    }
+
+    private void FixedUpdate()
+    {
+        //Ensures the creature is correctly rotated according to the current gravity
+        float rot = Mathf.Atan2(gravityDirection.y , gravityDirection.x) * Mathf.Rad2Deg;
+        gameObject.transform.rotation = Quaternion.Euler(0 , 0, rot + 90);
+        
+        //Accelerates the creature according to the current gravity
+        gameObject.GetComponent<Rigidbody2D>().AddForce((9.81f * gameObject.GetComponent<Rigidbody2D>().mass) * gravityDirection);
     }
 }
