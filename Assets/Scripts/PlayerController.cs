@@ -13,10 +13,12 @@ public class PlayerController : MonoBehaviour
 
     private float _movementForce;
     private Rigidbody2D _rb;
+    private Animator _an;
 
     private void Start()
     {
         _rb = gameObject.GetComponent<Rigidbody2D>();
+        _an = gameObject.GetComponent<Animator>();
     }
 
     void Update()
@@ -24,11 +26,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey("right"))
         {
             _rb.AddForce(_movementForce * transform.right);
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
+            _an.SetBool("directionPressed", true);
         }
-
-        if (Input.GetKey("left"))
+        else if (Input.GetKey("left"))
         {
             _rb.AddForce(_movementForce * -transform.right);
+            gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            _an.SetBool("directionPressed", true);
+        }
+        else
+        {
+            _an.SetBool("directionPressed", false);
         }
     }
 
