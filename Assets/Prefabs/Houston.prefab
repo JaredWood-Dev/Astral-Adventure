@@ -99,11 +99,11 @@ BoxCollider2D:
   m_GameObject: {fileID: 5018961498519374733}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: ed55cebb420f36648bc4b71b4fcb089c, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00000011920929, y: 0}
+  m_Offset: {x: 0.00000011920929, y: 0.014003634}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -114,7 +114,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5967653, y: 1}
+  m_Size: {x: 0.59, y: 0.97199273}
   m_EdgeRadius: 0
 --- !u!61 &8629778802202363691
 BoxCollider2D:
@@ -129,7 +129,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005803913, y: -0.48461986}
+  m_Offset: {x: 0.005803913, y: -0.48059383}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -140,7 +140,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5356936, y: 0.030760288}
+  m_Size: {x: 0.5356936, y: 0.022808254}
   m_EdgeRadius: 0
 --- !u!50 &5018961498519374734
 Rigidbody2D:
@@ -175,11 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a004d55eac31c6c41a60155aeebfc032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gravityDirection: {x: 0, y: -1}
   hitPoints: 20
   resistances: 0c000000
   vulnerabilities: 
   immunities: 
-  gravityDirection: {x: 0, y: -1}
 --- !u!114 &6261773704011712803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +193,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
-  jumpPower: 7.5
+  jumpPower: 10
   reactionPower: 100
+  onGround: 1
 --- !u!95 &1941662576
 Animator:
   serializedVersion: 5
