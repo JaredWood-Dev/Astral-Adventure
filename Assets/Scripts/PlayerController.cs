@@ -13,16 +13,20 @@ public class PlayerController : MonoBehaviour
     //The jumping strength of Houston
     public float jumpPower;
     public float reactionPower;
+    public bool onGround;
 
     private float _movementForce;
     private Vector2 _reactiveForce;
     private Rigidbody2D _rb;
     private Animator _an;
+    private Collider2D _foot;
 
     private void Start()
     {
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _an = gameObject.GetComponent<Animator>();
+        _foot = gameObject.GetComponents<Collider2D>()[1];
+
     }
 
     void Update()
@@ -45,9 +49,9 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && onGround)
         {
-            _rb.AddForce(transform.up * (jumpPower * 1000));
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpPower);
         }
     }
 
@@ -55,10 +59,32 @@ public class PlayerController : MonoBehaviour
     {
         //We need to calculate the amount of force needed to accelerate Houston to the desired maximum speed
         //F = m * a, a = v0 - vf / t
-        _movementForce = _rb.mass * ((maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
-        print(_movementForce);
+        if (onGround)
+        {
+            _movementForce = _rb.mass * ((maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
+        }
+        else
+        {
+            _movementForce = 0.5f * _rb.mass * ((maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
+        }
 
         //This calculates the reactive force to slow Houston down for tighter controls.
         _reactiveForce = _rb.velocity.normalized * -1 * reactionPower;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground") && other.otherCollider == _foot)
+        {
+            onGround = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground") && other.otherCollider == _foot)
+        {
+            onGround = false;
+        }
     }
 }

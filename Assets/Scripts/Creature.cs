@@ -80,6 +80,6 @@ public class Creature : MonoBehaviour
         gameObject.transform.rotation = Quaternion.Euler(0 , 0, rot + 90);
         
         //Accelerates the creature according to the current gravity
-        gameObject.GetComponent<Rigidbody2D>().AddForce((9.81f * gameObject.GetComponent<Rigidbody2D>().mass) * gravityDirection);
+        gameObject.GetComponent<Rigidbody2D>().AddForce((16f * gameObject.GetComponent<Rigidbody2D>().mass) * gravityDirection);
     }
 }
