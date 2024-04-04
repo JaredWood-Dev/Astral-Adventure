@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
         //F = m * a, a = v0 - vf / t
         if (onGround)
         {
+            //TODO: REPLACE VX WITH A RELATIVE VECTOR BASED ON GRAVITY DIRECTION
             _movementForce = _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
         }
         else
