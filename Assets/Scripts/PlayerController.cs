@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     public float reactionPower;
     public bool onGround;
+    private bool _horizontal = true;
 
     [Header("Arcade Gameplay")] 
     public Vector2 momentumBuffer;
@@ -42,23 +43,51 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //When pressing a directional key, add the force, scale the appreciate direction, and update the animations
-        if (Input.GetKey("right"))
+        //If the direction gravity is "vertical enough" use horizontal movement
+        if (_horizontal)
         {
-            _rb.AddForce(_movementForce * transform.right);
-            gameObject.transform.localScale = new Vector3(1, 1, 1);
-            _an.SetBool("directionPressed", true);
-        }
-        else if (Input.GetKey("left"))
-        {
-            _rb.AddForce(_movementForce * -transform.right);
-            gameObject.transform.localScale = new Vector3(-1, 1, 1);
-            _an.SetBool("directionPressed", true);
+            //X Axis Movement 
+            if (Input.GetKey("right"))
+            {
+                _rb.AddForce(_movementForce * RotateVector2(Vector2.up, -Mathf.PI/2));
+                gameObject.transform.localScale = new Vector3(-_c.gravityDirection.y, 1, 1);
+                _an.SetBool("directionPressed", true);
+            }
+            else if (Input.GetKey("left"))
+            {
+                _rb.AddForce(_movementForce * RotateVector2(Vector2.up, Mathf.PI/2));
+                gameObject.transform.localScale = new Vector3(_c.gravityDirection.y, 1, 1);
+                _an.SetBool("directionPressed", true);
+            }
+            else
+            {
+                _an.SetBool("directionPressed", false);
+
+            }
         }
         else
         {
-            _an.SetBool("directionPressed", false);
+            //Y Axis Movement
+            if (Input.GetKey("down"))
+            {
+                _rb.AddForce(_movementForce * Vector2.down);
+                gameObject.transform.localScale = new Vector3( -_c.gravityDirection.x, 1, 1);
+                _an.SetBool("directionPressed", true);
+            }
+            else if (Input.GetKey("up"))
+            {
+                _rb.AddForce(_movementForce * Vector2.up);
+                gameObject.transform.localScale = new Vector3(_c.gravityDirection.x, 1, 1);
+                _an.SetBool("directionPressed", true);
+            }
+            else
+            {
+                _an.SetBool("directionPressed", false);
 
+            }
         }
+        
+        
 
         //Attempting to jump, check if on ground, if not buffer the jump
         //Or if we are not on the ground jump if we recently left the ground
@@ -77,14 +106,27 @@ public class PlayerController : MonoBehaviour
     {
         //We need to calculate the amount of force needed to accelerate Houston to the desired maximum speed
         //F = m * a, a = v0 - vf / t
-        if (onGround)
+        if (_horizontal)
         {
-            //TODO: REPLACE VX WITH A RELATIVE VECTOR BASED ON GRAVITY DIRECTION
-            _movementForce = _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
+            if (onGround)
+            {
+                _movementForce = _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.x) / (Time.fixedDeltaTime * 100)));
+            }
+            else
+            {
+                _movementForce = 0.25f * _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.x) / (Time.fixedDeltaTime * 100)));
+            }
         }
         else
         {
-            _movementForce = 0.5f * _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.x)) / (Time.fixedDeltaTime * 100));
+            if (onGround)
+            {
+                _movementForce = _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.y) / (Time.fixedDeltaTime * 100)));
+            }
+            else
+            {
+                _movementForce = 0.25f * _rb.mass * (Mathf.Abs(maxSpeed - Mathf.Abs(_rb.velocity.y) / (Time.fixedDeltaTime * 100)));
+            }
         }
         
         //Clamp just in case, no absurd forces silly physics
@@ -94,7 +136,7 @@ public class PlayerController : MonoBehaviour
         _reactiveForce = _rb.velocity.normalized * -1 * reactionPower;
         
         //Update the momentum buffer
-        momentumBuffer = _rb.velocity * _rb.mass;
+        momentumBuffer = _rb.velocity;
         
         //Update Arcade Timers
         jumpBufferTimer += 0.1f;
@@ -105,6 +147,16 @@ public class PlayerController : MonoBehaviour
         }
 
         coyoteTimer += 0.1f;
+
+
+        if (Mathf.Abs(_c.gravityDirection.y) >= Mathf.Sin(Mathf.PI/4))
+        {
+            _horizontal = true;
+        }
+        else
+        {
+            _horizontal = false;
+        }
     }
 
     //When landing on the ground
@@ -113,8 +165,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground") && other.otherCollider == _foot)
         {
             onGround = true;
-            //_rb.velocity = momentumBuffer;
-            
+            _rb.velocity += momentumBuffer;
+
             //If we have Buffered our jump when landing, jump
             if (jumpBuffered)
             {
@@ -138,6 +190,20 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        _rb.velocity = new Vector2(_rb.velocity.x, jumpPower);
+        if (_horizontal)
+        {
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpPower * -_c.gravityDirection.y);
+        }
+        else
+        {
+            _rb.velocity = new Vector2(jumpPower * -_c.gravityDirection.x , _rb.velocity.y);
+        }
+    }
+
+    public Vector2 RotateVector2(Vector2 n, float angle)
+    {
+        float newX = n.x * Mathf.Cos(angle) - n.y * Mathf.Sin(angle);
+        float newY = n.x * Mathf.Sin(angle) - n.y * Mathf.Cos(angle);
+        return new Vector2(newX, newY);
     }
 }
