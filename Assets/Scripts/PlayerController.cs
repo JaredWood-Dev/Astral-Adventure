@@ -100,6 +100,11 @@ public class PlayerController : MonoBehaviour
             jumpBuffered = true;
             jumpBufferTimer = 0.0f;
         }
+
+        if (onGround)
+        {
+            _rb.AddForce(_reactiveForce);
+        }
     }
 
     private void FixedUpdate()

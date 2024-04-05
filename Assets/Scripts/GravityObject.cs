@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class GravityObject : MonoBehaviour
     [Header("Gravity")] 
     //This vector stores the current direction of the gravity.
     public Vector2 gravityDirection;
+    public float gravityAcceleration;
+
+    private Vector2 _gravityForce;
     
     private void FixedUpdate()
         {
@@ -15,7 +19,13 @@ public class GravityObject : MonoBehaviour
             float rot = Mathf.Atan2(gravityDirection.y , gravityDirection.x) * Mathf.Rad2Deg;
             gameObject.transform.rotation = Quaternion.Euler(0 , 0, rot + 90);
             
-            //Accelerates the creature according to the current gravity
-            gameObject.GetComponent<Rigidbody2D>().AddForce((16f * gameObject.GetComponent<Rigidbody2D>().mass) * gravityDirection);
+            //Calculate the Force of gravity on the object
+            _gravityForce = gravityAcceleration * gameObject.GetComponent<Rigidbody2D>().mass * gravityDirection;
         }
+
+    private void Update()
+    {
+        //Accelerates the creature according to the current gravity
+        gameObject.GetComponent<Rigidbody2D>().AddForce(_gravityForce);
+    }
 }
