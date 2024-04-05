@@ -100,7 +100,14 @@ public class PlayerController : MonoBehaviour
             jumpBuffered = true;
             jumpBufferTimer = 0.0f;
         }
+        
+        //Variable Jump Hight: Resetting back to normal gravity
+        if (Input.GetKeyUp("space") || (_rb.velocity * -_c.gravityDirection).magnitude < 0.1)
+        {
+            _c.currentGravityAcceleration = _c.defaultGravityAcceleration;
+        }
 
+        //Reactive force, for tighter gameplay
         if (onGround)
         {
             _rb.AddForce(_reactiveForce);
@@ -203,6 +210,8 @@ public class PlayerController : MonoBehaviour
         {
             _rb.velocity = new Vector2(jumpPower * -_c.gravityDirection.x , _rb.velocity.y);
         }
+
+        _c.currentGravityAcceleration = _c.defaultGravityAcceleration / 2;
     }
 
     public Vector2 RotateVector2(Vector2 n, float angle)

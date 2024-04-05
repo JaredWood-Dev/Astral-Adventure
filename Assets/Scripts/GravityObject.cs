@@ -9,10 +9,16 @@ public class GravityObject : MonoBehaviour
     [Header("Gravity")] 
     //This vector stores the current direction of the gravity.
     public Vector2 gravityDirection;
-    public float gravityAcceleration;
+    public float defaultGravityAcceleration;
+    public float currentGravityAcceleration;
 
     private Vector2 _gravityForce;
-    
+
+    private void Start()
+    {
+        //TODO: GET GRAVITY FROM LEVEL
+    }
+
     private void FixedUpdate()
         {
             //Ensures the creature is correctly rotated according to the current gravity
@@ -20,7 +26,7 @@ public class GravityObject : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Euler(0 , 0, rot + 90);
             
             //Calculate the Force of gravity on the object
-            _gravityForce = gravityAcceleration * gameObject.GetComponent<Rigidbody2D>().mass * gravityDirection;
+            _gravityForce = currentGravityAcceleration * gameObject.GetComponent<Rigidbody2D>().mass * gravityDirection;
         }
 
     private void Update()
