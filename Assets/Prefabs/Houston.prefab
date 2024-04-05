@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1941662576}
   m_Layer: 0
   m_Name: Houston
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00000011920929, y: 0.014003634}
+  m_Offset: {x: 0.00000011920929, y: 0.015829206}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -114,7 +114,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.59, y: 0.97199273}
+  m_Size: {x: 0.59, y: 0.9683416}
   m_EdgeRadius: 0
 --- !u!61 &8629778802202363691
 BoxCollider2D:
@@ -129,7 +129,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005803913, y: -0.48059383}
+  m_Offset: {x: 0.010063767, y: -0.4824194}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -140,7 +140,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5356936, y: 0.022808254}
+  m_Size: {x: 0.539345, y: 0.026459396}
   m_EdgeRadius: 0
 --- !u!50 &5018961498519374734
 Rigidbody2D:
@@ -155,10 +155,10 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 256
-  m_LinearDrag: 0
+  m_LinearDrag: 1.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: ef00615422589e24984965fd048e5bfb, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityDirection: {x: 0, y: -1}
+  defaultGravityAcceleration: 6
+  currentGravityAcceleration: 5
   hitPoints: 20
   resistances: 0c000000
   vulnerabilities: 
@@ -193,9 +195,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
-  jumpPower: 10
+  jumpPower: 15
   reactionPower: 100
   onGround: 1
+  momentumBuffer: {x: 0, y: 0}
+  jumpBufferTimer: 0
+  jumpBufferLimit: 0.5
+  jumpBuffered: 0
+  coyoteTimer: 0
+  coyoteLimit: 0.25
+  isPounding: 0
+  poundPower: 20
 --- !u!95 &1941662576
 Animator:
   serializedVersion: 5
