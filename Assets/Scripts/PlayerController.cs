@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     public float coyoteTimer = 0.0f;
     public float coyoteLimit = 0.1f;
 
+    [Header("Combat")] 
+    public bool isPounding = false;
+    public float poundPower = 10;
+
     private float _movementForce;
     private Vector2 _reactiveForce;
     private Rigidbody2D _rb;
@@ -64,6 +68,27 @@ public class PlayerController : MonoBehaviour
                 _an.SetBool("directionPressed", false);
 
             }
+            
+            //Check for Thunder-Pound
+            if (Input.GetKey("up") && _c.gravityDirection.y > 0 && !onGround)
+            {
+                isPounding = true;
+                ThunderGauntletPound();
+            }
+            if (Input.GetKey("down") && isPounding && _c.gravityDirection.y > 0)
+            {
+                isPounding = false;
+            }
+
+            if (Input.GetKey("down") && _c.gravityDirection.y < 0 && !onGround)
+            {
+                isPounding = true;
+                ThunderGauntletPound();
+            }
+            if (Input.GetKey("up") && isPounding && _c.gravityDirection.y < 0)
+            {
+                isPounding = false;
+            }
         }
         else
         {
@@ -84,6 +109,27 @@ public class PlayerController : MonoBehaviour
             {
                 _an.SetBool("directionPressed", false);
 
+            }
+            
+            //Check for Thunder-Pound
+            if (Input.GetKey("right") && _c.gravityDirection.x > 0 && !onGround)
+            {
+                isPounding = true;
+                ThunderGauntletPound();
+            }
+            if (Input.GetKey("left") && isPounding && _c.gravityDirection.x > 0)
+            {
+                isPounding = false;
+            }
+
+            if (Input.GetKey("left") && _c.gravityDirection.x < 0 && !onGround)
+            {
+                isPounding = true;
+                ThunderGauntletPound();
+            }
+            if (Input.GetKey("right") && isPounding && _c.gravityDirection.x < 0)
+            {
+                isPounding = false;
             }
         }
         
@@ -184,6 +230,13 @@ public class PlayerController : MonoBehaviour
             {
                 Jump();
             }
+            
+            //TODO IMPLEMENT GAUNTLET SHOCKWAVE DAMAGE
+            if (isPounding)
+            {
+                print("BOOM!");
+                isPounding = false;
+            }
         }
     }
 
@@ -197,6 +250,7 @@ public class PlayerController : MonoBehaviour
             
             //When we leave the ground, reset the coyote timer
             coyoteTimer = 0.0f;
+            
         }
     }
 
@@ -219,5 +273,10 @@ public class PlayerController : MonoBehaviour
         float newX = n.x * Mathf.Cos(angle) - n.y * Mathf.Sin(angle);
         float newY = n.x * Mathf.Sin(angle) - n.y * Mathf.Cos(angle);
         return new Vector2(newX, newY);
+    }
+
+    public void ThunderGauntletPound()
+    {
+        _rb.velocity = _c.gravityDirection * poundPower;
     }
 }

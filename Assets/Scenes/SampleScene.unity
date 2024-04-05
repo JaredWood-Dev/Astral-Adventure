@@ -1759,6 +1759,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6261773704011712803, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
+      propertyPath: poundPower
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261773704011712803, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: coyoteLimit
       value: 0.25
       objectReference: {fileID: 0}
