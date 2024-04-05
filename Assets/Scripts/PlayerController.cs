@@ -237,6 +237,8 @@ public class PlayerController : MonoBehaviour
                 print("BOOM!");
                 isPounding = false;
             }
+            
+            _an.SetBool("inAir", false);
         }
     }
 
@@ -266,6 +268,8 @@ public class PlayerController : MonoBehaviour
         }
 
         _c.currentGravityAcceleration = _c.defaultGravityAcceleration / 2;
+        
+        _an.SetBool("inAir", true);
     }
 
     public Vector2 RotateVector2(Vector2 n, float angle)
