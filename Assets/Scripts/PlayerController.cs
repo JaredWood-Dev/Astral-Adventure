@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     private Animator _an;
     private Collider2D _foot;
     private Creature _c;
+    
+    //Particle Systems
+    private ParticleSystemController _runSystem;
 
     private void Start()
     {
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
         _an = gameObject.GetComponent<Animator>();
         _foot = gameObject.GetComponents<Collider2D>()[1];
         _c = gameObject.GetComponent<Creature>();
+        _runSystem = gameObject.GetComponents<ParticleSystemController>()[0]; //First Particle System is the run
 
     }
 
@@ -62,10 +66,12 @@ public class PlayerController : MonoBehaviour
                 _rb.AddForce(_movementForce * RotateVector2(Vector2.up, Mathf.PI/2));
                 gameObject.transform.localScale = new Vector3(_c.gravityDirection.y, 1, 1);
                 _an.SetBool("directionPressed", true);
+                
             }
             else
             {
                 _an.SetBool("directionPressed", false);
+                //_runSystem.StopSystem();
 
             }
             
@@ -91,6 +97,15 @@ public class PlayerController : MonoBehaviour
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
             }
+
+            if (Mathf.Abs(_rb.velocity.x) > 0)
+            {
+                _runSystem.StartSystem();
+            }
+            else
+            {
+                _runSystem.StopSystem();
+            }
         }
         else
         {
@@ -110,6 +125,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 _an.SetBool("directionPressed", false);
+                //_runSystem.StopSystem();
 
             }
             
@@ -134,6 +150,15 @@ public class PlayerController : MonoBehaviour
             {
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
+            }
+            
+            if (Mathf.Abs(_rb.velocity.y) > 0)
+            {
+                _runSystem.StartSystem();
+            }
+            else
+            {
+                _runSystem.StopSystem();
             }
         }
         
@@ -288,7 +313,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb.velocity = new Vector2(0, 0);
         _an.SetBool("gravSlam", true);
-        Invoke("FinishPound", 0.2f);
+        Invoke("FinishPound", 0.4f);
     }
 
     private void FinishPound()
