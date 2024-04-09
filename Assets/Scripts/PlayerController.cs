@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //Check for Thunder-Pound
-            if (Input.GetKey("up") && _c.gravityDirection.y > 0 && !onGround)
+            if (Input.GetKeyDown("up") && _c.gravityDirection.y > 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
@@ -78,9 +78,10 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey("down") && isPounding && _c.gravityDirection.y > 0)
             {
                 isPounding = false;
+                _an.SetBool("gravSlam", false);
             }
 
-            if (Input.GetKey("down") && _c.gravityDirection.y < 0 && !onGround)
+            if (Input.GetKeyDown("down") && _c.gravityDirection.y < 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
@@ -88,6 +89,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey("up") && isPounding && _c.gravityDirection.y < 0)
             {
                 isPounding = false;
+                _an.SetBool("gravSlam", false);
             }
         }
         else
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //Check for Thunder-Pound
-            if (Input.GetKey("right") && _c.gravityDirection.x > 0 && !onGround)
+            if (Input.GetKeyDown("right") && _c.gravityDirection.x > 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
@@ -120,9 +122,10 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey("left") && isPounding && _c.gravityDirection.x > 0)
             {
                 isPounding = false;
+                _an.SetBool("gravSlam", false);
             }
 
-            if (Input.GetKey("left") && _c.gravityDirection.x < 0 && !onGround)
+            if (Input.GetKeyDown("left") && _c.gravityDirection.x < 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
@@ -130,6 +133,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey("right") && isPounding && _c.gravityDirection.x < 0)
             {
                 isPounding = false;
+                _an.SetBool("gravSlam", false);
             }
         }
         
@@ -239,6 +243,7 @@ public class PlayerController : MonoBehaviour
             }
             
             _an.SetBool("inAir", false);
+            _an.SetBool("gravSlam", false);
         }
     }
 
@@ -280,6 +285,13 @@ public class PlayerController : MonoBehaviour
     }
 
     public void ThunderGauntletPound()
+    {
+        _rb.velocity = new Vector2(0, 0);
+        _an.SetBool("gravSlam", true);
+        Invoke("FinishPound", 0.2f);
+    }
+
+    private void FinishPound()
     {
         _rb.velocity = _c.gravityDirection * poundPower;
     }
