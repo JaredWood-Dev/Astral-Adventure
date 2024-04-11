@@ -311,9 +311,9 @@ public class PlayerController : MonoBehaviour
 
     public void ThunderGauntletPound()
     {
-        _rb.velocity = new Vector2(0, 0);
+        _rb.AddForce(jumpPower * -_c.gravityDirection, ForceMode2D.Impulse);
         _an.SetBool("gravSlam", true);
-        Invoke("FinishPound", 0.4f);
+        Invoke("FinishPound", 0.2f);
     }
 
     private void FinishPound()
