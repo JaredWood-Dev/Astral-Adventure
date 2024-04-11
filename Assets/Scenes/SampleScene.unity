@@ -134,9 +134,9 @@ GameObject:
   - component: {fileID: 431823556}
   - component: {fileID: 431823555}
   - component: {fileID: 431823554}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 812041485}
   - component: {fileID: 812041484}
   - component: {fileID: 812041483}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (2)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 1007381432}
   - component: {fileID: 1007381431}
   - component: {fileID: 1007381430}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (9)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -667,7 +667,7 @@ GameObject:
   - component: {fileID: 1220144457}
   - component: {fileID: 1220144456}
   - component: {fileID: 1220144455}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (10)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 1247415757}
   - component: {fileID: 1247415756}
   - component: {fileID: 1247415755}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (7)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -889,7 +889,7 @@ GameObject:
   - component: {fileID: 1301154333}
   - component: {fileID: 1301154332}
   - component: {fileID: 1301154331}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (6)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1000,7 +1000,7 @@ GameObject:
   - component: {fileID: 1499490781}
   - component: {fileID: 1499490780}
   - component: {fileID: 1499490779}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (3)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1111,7 +1111,7 @@ GameObject:
   - component: {fileID: 1571731014}
   - component: {fileID: 1571731013}
   - component: {fileID: 1571731012}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (4)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1222,7 +1222,7 @@ GameObject:
   - component: {fileID: 1599002718}
   - component: {fileID: 1599002717}
   - component: {fileID: 1599002716}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1333,7 +1333,7 @@ GameObject:
   - component: {fileID: 1693461958}
   - component: {fileID: 1693461957}
   - component: {fileID: 1693461956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (5)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1444,7 +1444,7 @@ GameObject:
   - component: {fileID: 1801366133}
   - component: {fileID: 1801366132}
   - component: {fileID: 1801366131}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (8)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1544,25 +1544,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1801624392 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5018961498519374733, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-  m_PrefabInstance: {fileID: 5018961498870193476}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1801624401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1801624392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec28f7ac85ee8f847b108df98f961bc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSystem: {fileID: 210349921752515823, guid: 73e014b16fdf459448078bd407628528, type: 3}
-  systemOffset: {x: -0.25, y: -0.5, z: 0}
 --- !u!1 &2052816844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,7 +1555,7 @@ GameObject:
   - component: {fileID: 2052816847}
   - component: {fileID: 2052816846}
   - component: {fileID: 2052816845}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (11)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1681,10 +1662,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1231553917893448544, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: defaultGravityAcceleration
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 5018961498519374729, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1733,5 +1710,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Houston
       objectReference: {fileID: 0}
+    - target: {fileID: 6261773704011712803, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 519420031}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}

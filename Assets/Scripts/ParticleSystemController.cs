@@ -11,6 +11,9 @@ public class ParticleSystemController : MonoBehaviour
     //Offset of the system
     public Vector3 systemOffset;
 
+    //Toggle whether the system continues to follow the player
+    public bool followObject;
+
     private void Start()
     {
         //Create the particle system
@@ -20,7 +23,11 @@ public class ParticleSystemController : MonoBehaviour
     private void Update()
     {
         //Keep the particle system with the parent object
-        targetSystem.transform.position = gameObject.transform.position + systemOffset;
+        if (followObject)
+        {
+            targetSystem.transform.position = gameObject.transform.position + systemOffset;
+            targetSystem.transform.rotation = gameObject.transform.rotation;
+        }
     }
 
     public void DeleteSystem()
@@ -30,8 +37,9 @@ public class ParticleSystemController : MonoBehaviour
 
     public void StartSystem()
     {
+        targetSystem.transform.position = gameObject.transform.position + systemOffset;
+        targetSystem.transform.rotation = gameObject.transform.rotation;
         targetSystem.Play();
-        print(targetSystem);
     }
 
     public void StopSystem()

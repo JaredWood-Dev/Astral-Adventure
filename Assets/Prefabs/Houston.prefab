@@ -16,6 +16,9 @@ GameObject:
   - component: {fileID: 1231553917893448544}
   - component: {fileID: 6261773704011712803}
   - component: {fileID: 1941662576}
+  - component: {fileID: 1801624401}
+  - component: {fileID: 1801624410}
+  - component: {fileID: 1801624411}
   m_Layer: 0
   m_Name: Houston
   m_TagString: Player
@@ -176,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityDirection: {x: 0, y: -1}
-  defaultGravityAcceleration: 6
+  defaultGravityAcceleration: 7
   currentGravityAcceleration: 5
   hitPoints: 20
   resistances: 0c000000
@@ -194,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69f4f3e6c469e040aff7bb796e222b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
   maxSpeed: 10
   jumpPower: 15
   reactionPower: 100
@@ -206,6 +210,10 @@ MonoBehaviour:
   coyoteLimit: 0.25
   isPounding: 0
   poundPower: 20
+  launchPower: 75
+  breathDistance: 2.5
+  breathCoolDown: 5
+  breathTimer: 0
 --- !u!95 &1941662576
 Animator:
   serializedVersion: 5
@@ -227,3 +235,48 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1801624401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5018961498519374733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec28f7ac85ee8f847b108df98f961bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSystem: {fileID: 210349921752515823, guid: 73e014b16fdf459448078bd407628528, type: 3}
+  systemOffset: {x: -0.25, y: -0.5, z: 0}
+  followObject: 1
+--- !u!114 &1801624410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5018961498519374733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec28f7ac85ee8f847b108df98f961bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSystem: {fileID: 2417299826719778342, guid: 85c6bf0ec07f97b4593ce3c1c8185644, type: 3}
+  systemOffset: {x: 0, y: -0.5, z: 0}
+  followObject: 0
+--- !u!114 &1801624411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5018961498519374733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec28f7ac85ee8f847b108df98f961bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSystem: {fileID: 1163344634119602332, guid: 83dadd9be3e4db34e8189e13034aeef0, type: 3}
+  systemOffset: {x: 0, y: 0.4, z: 0}
+  followObject: 0

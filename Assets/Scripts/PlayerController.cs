@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //This script handles the player movement and other controls
+    public Camera mainCamera;
 
     [Header("Movement")]
     //The maximum speed of Houston
@@ -34,9 +35,17 @@ public class PlayerController : MonoBehaviour
     private Animator _an;
     private Collider2D _foot;
     private Creature _c;
+
+    [Header("Gravity Breath")] 
+    public float launchPower;
+    public float breathDistance = 5;
+    public float breathCoolDown = 10f;
+    public float breathTimer;
     
     //Particle Systems
     private ParticleSystemController _runSystem;
+    private ParticleSystemController _gravPoundSystem;
+    private ParticleSystemController _gravityBreathSystem;
 
     private void Start()
     {
@@ -45,23 +54,36 @@ public class PlayerController : MonoBehaviour
         _foot = gameObject.GetComponents<Collider2D>()[1];
         _c = gameObject.GetComponent<Creature>();
         _runSystem = gameObject.GetComponents<ParticleSystemController>()[0]; //First Particle System is the run
+        _gravPoundSystem = gameObject.GetComponents<ParticleSystemController>()[1]; //Second Particle System is the shockwave
+        _gravityBreathSystem = gameObject.GetComponents<ParticleSystemController>()[2]; //Third Particle System is Houston's Gravity breath
 
     }
 
     void Update()
     {
+        //Houston's Breath Weapon
+        if (Input.GetKeyDown("left shift"))
+        {
+            if (breathTimer > breathCoolDown)
+            {
+                BreathWeapon();
+                breathTimer = 0.0f;
+            }
+        }
+        
+        
         //When pressing a directional key, add the force, scale the appreciate direction, and update the animations
         //If the direction gravity is "vertical enough" use horizontal movement
         if (_horizontal)
         {
             //X Axis Movement 
-            if (Input.GetKey("right"))
+            if (Input.GetKey("d"))
             {
                 _rb.AddForce(_movementForce * RotateVector2(Vector2.up, -Mathf.PI/2));
                 gameObject.transform.localScale = new Vector3(-_c.gravityDirection.y, 1, 1);
                 _an.SetBool("directionPressed", true);
             }
-            else if (Input.GetKey("left"))
+            else if (Input.GetKey("a"))
             {
                 _rb.AddForce(_movementForce * RotateVector2(Vector2.up, Mathf.PI/2));
                 gameObject.transform.localScale = new Vector3(_c.gravityDirection.y, 1, 1);
@@ -71,28 +93,27 @@ public class PlayerController : MonoBehaviour
             else
             {
                 _an.SetBool("directionPressed", false);
-                //_runSystem.StopSystem();
 
             }
             
             //Check for Thunder-Pound
-            if (Input.GetKeyDown("up") && _c.gravityDirection.y > 0 && !onGround)
+            if (Input.GetKeyDown("w") && _c.gravityDirection.y > 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
             }
-            if (Input.GetKey("down") && isPounding && _c.gravityDirection.y > 0)
+            if (Input.GetKey("s") && isPounding && _c.gravityDirection.y > 0)
             {
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
             }
 
-            if (Input.GetKeyDown("down") && _c.gravityDirection.y < 0 && !onGround)
+            if (Input.GetKeyDown("s") && _c.gravityDirection.y < 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
             }
-            if (Input.GetKey("up") && isPounding && _c.gravityDirection.y < 0)
+            if (Input.GetKey("w") && isPounding && _c.gravityDirection.y < 0)
             {
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
@@ -110,13 +131,13 @@ public class PlayerController : MonoBehaviour
         else
         {
             //Y Axis Movement
-            if (Input.GetKey("down"))
+            if (Input.GetKey("s"))
             {
                 _rb.AddForce(_movementForce * Vector2.down);
                 gameObject.transform.localScale = new Vector3( -_c.gravityDirection.x, 1, 1);
                 _an.SetBool("directionPressed", true);
             }
-            else if (Input.GetKey("up"))
+            else if (Input.GetKey("w"))
             {
                 _rb.AddForce(_movementForce * Vector2.up);
                 gameObject.transform.localScale = new Vector3(_c.gravityDirection.x, 1, 1);
@@ -125,40 +146,29 @@ public class PlayerController : MonoBehaviour
             else
             {
                 _an.SetBool("directionPressed", false);
-                //_runSystem.StopSystem();
-
             }
             
             //Check for Thunder-Pound
-            if (Input.GetKeyDown("right") && _c.gravityDirection.x > 0 && !onGround)
+            if (Input.GetKeyDown("d") && _c.gravityDirection.x > 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
             }
-            if (Input.GetKey("left") && isPounding && _c.gravityDirection.x > 0)
+            if (Input.GetKey("a") && isPounding && _c.gravityDirection.x > 0)
             {
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
             }
 
-            if (Input.GetKeyDown("left") && _c.gravityDirection.x < 0 && !onGround)
+            if (Input.GetKeyDown("a") && _c.gravityDirection.x < 0 && !onGround)
             {
                 isPounding = true;
                 ThunderGauntletPound();
             }
-            if (Input.GetKey("right") && isPounding && _c.gravityDirection.x < 0)
+            if (Input.GetKey("d") && isPounding && _c.gravityDirection.x < 0)
             {
                 isPounding = false;
                 _an.SetBool("gravSlam", false);
-            }
-            
-            if (Mathf.Abs(_rb.velocity.y) > 0)
-            {
-                _runSystem.StartSystem();
-            }
-            else
-            {
-                _runSystem.StopSystem();
             }
         }
         
@@ -244,6 +254,9 @@ public class PlayerController : MonoBehaviour
         {
             _horizontal = false;
         }
+        
+        //Update Cooldown
+        breathTimer += 0.1f;
     }
 
     //When landing on the ground
@@ -263,8 +276,8 @@ public class PlayerController : MonoBehaviour
             //TODO IMPLEMENT GAUNTLET SHOCKWAVE DAMAGE
             if (isPounding)
             {
-                print("BOOM!");
                 isPounding = false;
+                _gravPoundSystem.StartSystem();
             }
             
             _an.SetBool("inAir", false);
@@ -319,5 +332,34 @@ public class PlayerController : MonoBehaviour
     private void FinishPound()
     {
         _rb.velocity = _c.gravityDirection * poundPower;
+    }
+
+    void BreathWeapon()
+    {
+        //Play the particle system
+        _gravityBreathSystem.StartSystem();
+        
+        //Next, get the direction of the mouse & Angle the particle system
+        Vector3 mousePos = Input.mousePosition;
+        Vector2 worldMousePos = mainCamera.ScreenToWorldPoint(mousePos);
+        float diffX = worldMousePos.x - gameObject.transform.position.x;
+        float diffY = worldMousePos.y - gameObject.transform.position.y;
+        float rot = Mathf.Atan2(diffY,diffX);
+        rot = rot * Mathf.Rad2Deg;
+        
+        _gravityBreathSystem.targetSystem.transform.rotation = Quaternion.AngleAxis(rot, Vector3.forward);
+
+        //Apply AOE damage
+        //TODO:IMPLEMENT ATTACK SYSTEM
+        
+        //Raycast Out to mouse
+        Vector2 breathDirection = new Vector2(diffX, diffY);
+        bool breathRay = Physics2D.Raycast(gameObject.transform.position, breathDirection.normalized, breathDistance, 1 << 7);
+
+        //If we hit the ground, launch the player in the opposite direction
+        if (breathRay)
+        {
+            _rb.AddForce(-breathDirection.normalized * launchPower * 100, ForceMode2D.Impulse);
+        }
     }
 }
