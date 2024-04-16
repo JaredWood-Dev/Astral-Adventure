@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8629778802202363691}
   - component: {fileID: 5018961498519374734}
   - component: {fileID: 1231553917893448544}
-  - component: {fileID: 6261773704011712803}
   - component: {fileID: 1941662576}
   - component: {fileID: 1801624401}
   - component: {fileID: 1801624410}
@@ -185,35 +184,6 @@ MonoBehaviour:
   resistances: 0c000000
   vulnerabilities: 
   immunities: 
---- !u!114 &6261773704011712803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018961498519374733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f69f4f3e6c469e040aff7bb796e222b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  maxSpeed: 10
-  jumpPower: 15
-  reactionPower: 100
-  onGround: 1
-  momentumBuffer: {x: 0, y: 0}
-  jumpBufferTimer: 0
-  jumpBufferLimit: 0.5
-  jumpBuffered: 0
-  coyoteTimer: 0
-  coyoteLimit: 0.25
-  isPounding: 0
-  poundPower: 20
-  launchPower: 75
-  breathDistance: 2.5
-  breathCoolDown: 5
-  breathTimer: 0
 --- !u!95 &1941662576
 Animator:
   serializedVersion: 5
