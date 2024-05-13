@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public bool onGround;
     public float jumpBufferDuration;
     private float _jumpBufferTimer;
+    public float coyoteTimeDuration;
+    private float _coyoteTimer;
 
     private Rigidbody2D _rb;
     private Creature _c;
@@ -55,6 +57,11 @@ public class PlayerController : MonoBehaviour
             if (onGround || Physics2D.OverlapBox(transform.position, new Vector2(0.45f,1), transform.position.z, 1<<7))
             {
                 //Then jump
+                Jump();
+            }
+            //If we are not on the ground, but have recently left the ground, jump anyway (Coyote Time)
+            else if(_coyoteTimer > 0)
+            {
                 Jump();
             }
             //If we are are not on the ground, buffer the jump
@@ -121,6 +128,9 @@ public class PlayerController : MonoBehaviour
         {
             onGround = false;
             _animator.SetBool("inAir", true);
+            
+            //If we leave the ground we also want to start our coyote timer
+            _coyoteTimer = coyoteTimeDuration;
         }
     }
     
@@ -128,5 +138,6 @@ public class PlayerController : MonoBehaviour
     void UpdateTimers()
     {
         _jumpBufferTimer -= Time.fixedDeltaTime;
+        _coyoteTimer -= Time.fixedDeltaTime;
     }
 }

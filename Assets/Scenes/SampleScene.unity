@@ -1664,15 +1664,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: jumpPower
-      value: 3500
+      value: 3750
       objectReference: {fileID: 0}
     - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: reactionPower
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
+      propertyPath: coyoteTimeDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: jumpBufferDuration
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231553917893448544, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
+      propertyPath: currentGravityAcceleration
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5018961498519374729, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: m_RootOrder
