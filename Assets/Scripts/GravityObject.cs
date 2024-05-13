@@ -16,6 +16,7 @@ public class GravityObject : MonoBehaviour
 
     private void Start()
     {
+        //Application.targetFrameRate = 144;
         //TODO: GET GRAVITY FROM LEVEL
     }
 
@@ -27,11 +28,8 @@ public class GravityObject : MonoBehaviour
             
             //Calculate the Force of gravity on the object
             _gravityForce = currentGravityAcceleration * gameObject.GetComponent<Rigidbody2D>().mass * gravityDirection;
+            
+            //Accelerates the creature according to the current gravity
+            gameObject.GetComponent<Rigidbody2D>().AddForce(_gravityForce);
         }
-
-    private void Update()
-    {
-        //Accelerates the creature according to the current gravity
-        gameObject.GetComponent<Rigidbody2D>().AddForce(_gravityForce);
-    }
 }
