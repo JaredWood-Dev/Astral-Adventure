@@ -8,8 +8,6 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")] 
     public float movementSpeed;
     public float targetMovementSpeed;
-    [Range(1,2)]
-    public float reactionPower;
 
     [Header("Jumping")] 
     public float jumpPower;
@@ -37,9 +35,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        print(inputVector);
-        
         //Change the target movement speed based on the input
         targetMovementSpeed = movementSpeed * Input.GetAxis("Horizontal");
         
@@ -49,15 +44,12 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(Mathf.Sign(targetMovementSpeed), 1, 1);
         }
         
-        
-
         //If the key is pressed to jump
         if (Input.GetButtonDown("Jump"))
         {
             //Make sure we are on the ground before jumping
-            if (Physics2D.OverlapBox(transform.position, new Vector2(0.45f,1), transform.position.z, 1<<7))
+            if (onGround || Physics2D.OverlapBox(transform.position, new Vector2(0.45f,1), transform.position.z, 1<<7))
             {
-                print("j");
                 //Then jump
                 Jump();
             }
@@ -78,7 +70,7 @@ public class PlayerController : MonoBehaviour
         float a = (targetMovementSpeed - vVector.x) / Time.deltaTime;
 
         //Calculate the force vector
-        Vector2 f = a * _rb.mass * transform.right * reactionPower;
+        Vector2 f = a * _rb.mass * transform.right;
         
         //Apply the force to the character
         _rb.AddForce(f);
@@ -108,7 +100,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground") && other.otherCollider == gameObject.GetComponents<BoxCollider2D>()[1])
         {
             onGround = true;
-            
+
             //If the jump is buffered, we want to follow through
             if (_jumpBufferTimer > 0)
             {
@@ -120,7 +112,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit2D(Collision2D other)
     {
         //If we are leaving ground, we are no longer onGround
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") && other.otherCollider == gameObject.GetComponents<BoxCollider2D>()[1])
         {
             onGround = false;
         }
