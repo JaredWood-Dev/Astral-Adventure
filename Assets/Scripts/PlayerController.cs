@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     private Creature _c;
     private Animator _animator;
 
+    //TODO: IMPLEMENT VARIABLE JUMP HEIGHT
+    //TODO: IMPLEMENT COYOTE TIME
+    //TODO: IMPLEMENT GRAVITY SLAM
+    //TODO: IMPLEMENT SINGULARITY BREATH
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -100,6 +104,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground") && other.otherCollider == gameObject.GetComponents<BoxCollider2D>()[1])
         {
             onGround = true;
+            _animator.SetBool("inAir", false);
 
             //If the jump is buffered, we want to follow through
             if (_jumpBufferTimer > 0)
@@ -115,6 +120,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground") && other.otherCollider == gameObject.GetComponents<BoxCollider2D>()[1])
         {
             onGround = false;
+            _animator.SetBool("inAir", true);
         }
     }
     
