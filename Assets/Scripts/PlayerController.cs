@@ -16,13 +16,13 @@ public class PlayerController : MonoBehaviour
     private float _jumpBufferTimer;
     public float coyoteTimeDuration;
     private float _coyoteTimer;
+    private float _playerVelocityAgainstGravity; //The player's current velocity projected along the direction opposite to gravity
 
     private Rigidbody2D _rb;
     private Creature _c;
     private Animator _animator;
 
     //TODO: IMPLEMENT VARIABLE JUMP HEIGHT
-    //TODO: IMPLEMENT COYOTE TIME
     //TODO: IMPLEMENT GRAVITY SLAM
     //TODO: IMPLEMENT SINGULARITY BREATH
     private void Start()
@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
         MoveCharacter();
         
         UpdateTimers();
+
+        //Calculates the player's gravity projected along the axis opposite to gravity.
+        _playerVelocityAgainstGravity = (_rb.velocity * -_c.gravityDirection).magnitude;
     }
 
     private void Update()
@@ -70,6 +73,12 @@ public class PlayerController : MonoBehaviour
                 _jumpBufferTimer = jumpBufferDuration;
             }
         }
+        
+        //Variable Jump Height: If we release the space bar, or reach the apex, return to normal gravity.
+        if (Input.GetButtonUp("Jump") || (_playerVelocityAgainstGravity < 1 && !onGround))
+        {
+            _c.currentGravityAcceleration = _c.defaultGravityAcceleration;
+        }
     }
 
     public void MoveCharacter()
@@ -83,7 +92,11 @@ public class PlayerController : MonoBehaviour
         //Calculate the force vector
         Vector2 f = a * _rb.mass * transform.right;
         
-        //Apply the force to the character
+        //Adjust the power based on if we are in the air
+        if (!onGround)
+            f *= 0.25f;
+        
+            //Apply the force to the character
         _rb.AddForce(f);
         
         //Animate the player
@@ -103,6 +116,10 @@ public class PlayerController : MonoBehaviour
     {
         //When we jump, we want to apply an impulse in the opposite direction of gravity
         _rb.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
+        
+        //Variable Jump Height: Adjust the gravity when we jump
+        //While the space bar is pressed, half the downward acceleration of gravity
+        _c.currentGravityAcceleration = _c.defaultGravityAcceleration / 2;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
