@@ -106,7 +106,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00000011920929, y: 0.015829206}
+  m_Offset: {x: 0.00000011920929, y: 0.020034194}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -117,7 +117,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.59, y: 0.9683416}
+  m_Size: {x: 0.59, y: 0.9599316}
   m_EdgeRadius: 0
 --- !u!61 &8629778802202363691
 BoxCollider2D:
@@ -132,7 +132,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.010063767, y: -0.4824194}
+  m_Offset: {x: -0.0028040558, y: -0.4834324}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -143,7 +143,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.539345, y: 0.026459396}
+  m_Size: {x: 0.54781115, y: 0.042518377}
   m_EdgeRadius: 0
 --- !u!50 &5018961498519374734
 Rigidbody2D:
@@ -162,8 +162,8 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
+  m_Interpolate: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &1231553917893448544
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityDirection: {x: 0, y: -1}
-  defaultGravityAcceleration: 7
-  currentGravityAcceleration: 5
+  defaultGravityAcceleration: 65
+  currentGravityAcceleration: 100
   hitPoints: 20
   resistances: 0c000000
   vulnerabilities: 
@@ -265,4 +265,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   targetMovementSpeed: 0
-  reactionPower: 2
+  movementVector: {x: 0, y: 0}
+  jumpPower: 3750
+  onGround: 0
+  jumpBufferDuration: 0.1
+  coyoteTimeDuration: 0.1
+  isGravSlam: 0
+  gravitySlamPower: 25

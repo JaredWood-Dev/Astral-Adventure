@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")] 
     public float movementSpeed;
     public float targetMovementSpeed;
+    public Vector2 movementVector;
 
     [Header("Jumping")] 
     public float jumpPower;
@@ -18,12 +19,14 @@ public class PlayerController : MonoBehaviour
     private float _coyoteTimer;
     private float _playerVelocityAgainstGravity; //The player's current velocity projected along the direction opposite to gravity
 
+    [Header("Combat Movement")] 
+    public bool isGravSlam;
+    public float gravitySlamPower;
+    
     private Rigidbody2D _rb;
     private Creature _c;
     private Animator _animator;
-
-    //TODO: IMPLEMENT VARIABLE JUMP HEIGHT
-    //TODO: IMPLEMENT GRAVITY SLAM
+    
     //TODO: IMPLEMENT SINGULARITY BREATH
     private void Start()
     {
@@ -40,6 +43,22 @@ public class PlayerController : MonoBehaviour
 
         //Calculates the player's gravity projected along the axis opposite to gravity.
         _playerVelocityAgainstGravity = (_rb.velocity * -_c.gravityDirection).magnitude;
+
+        //If we are in the air and we press the button that is the same direction as gravity, we want to gravity slam
+        if ((movementVector == _c.gravityDirection) && !onGround)
+        {
+            //If we are not already performing a gravity slam
+            if (!isGravSlam)
+            {
+                GravitySlam();
+            }
+        }
+        
+        //If we are in the air and performing a gravity slam, and press the button opposite the direction gravity, cancel the gravity slam
+        if (movementVector == -_c.gravityDirection && !onGround && isGravSlam)
+        {
+            EndGravitySlam();
+        }
     }
 
     private void Update()
@@ -79,6 +98,9 @@ public class PlayerController : MonoBehaviour
         {
             _c.currentGravityAcceleration = _c.defaultGravityAcceleration;
         }
+        
+        //Update the vector based on your current movement
+        movementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
     public void MoveCharacter()
@@ -135,6 +157,12 @@ public class PlayerController : MonoBehaviour
             {
                 Jump();
             }
+            
+            //If we land on the ground while performing a gravity slam
+            if (isGravSlam)
+            {
+                LandGravitySlam();
+            }
         }
     }
 
@@ -156,5 +184,44 @@ public class PlayerController : MonoBehaviour
     {
         _jumpBufferTimer -= Time.fixedDeltaTime;
         _coyoteTimer -= Time.fixedDeltaTime;
+    }
+
+    //Begins the gravity slam move
+    void GravitySlam()
+    {
+        //Update the condition
+        isGravSlam = true;
+        
+        //Play the animation
+        _animator.SetBool("gravSlam", true);
+        
+        //Delay, then apply the force
+        Invoke("ApplySlamForce", 0.2f);
+    }
+
+    //Function to allow applying a force after a delay
+    void ApplySlamForce()
+    {
+        _rb.velocity = _c.gravityDirection * gravitySlamPower;
+    }
+
+    //Handles stopping a gravity slam. The player will will either air-cancel or follow-through, either will end the Slam.
+    void EndGravitySlam()
+    {
+        //Update the condition
+        isGravSlam = false;
+        
+        //Update the animator
+        _animator.SetBool("gravSlam", false);
+    }
+
+    //Handles the effects of landing while performing a gravity slam
+    void LandGravitySlam()
+    {
+        //Update necessary changes to stop performing a gravity slam.
+        EndGravitySlam();
+        
+        //Play the particle system
+        GetComponents<ParticleSystemController>()[1].StartSystem();
     }
 }
