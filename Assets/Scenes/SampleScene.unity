@@ -1662,26 +1662,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: jumpPower
-      value: 3750
-      objectReference: {fileID: 0}
-    - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: reactionPower
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: coyoteTimeDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 854093351, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: jumpBufferDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1231553917893448544, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: currentGravityAcceleration
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 5018961498519374729, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1729,38 +1709,6 @@ PrefabInstance:
     - target: {fileID: 5018961498519374733, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
       propertyPath: m_Name
       value: Houston
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018961498519374734, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018961498519374734, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_SleepingMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018961498519374735, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Size.y
-      value: 0.9599316
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018961498519374735, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.020034194
-      objectReference: {fileID: 0}
-    - target: {fileID: 8629778802202363691, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Size.x
-      value: 0.54781115
-      objectReference: {fileID: 0}
-    - target: {fileID: 8629778802202363691, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Size.y
-      value: 0.042518377
-      objectReference: {fileID: 0}
-    - target: {fileID: 8629778802202363691, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.0028040558
-      objectReference: {fileID: 0}
-    - target: {fileID: 8629778802202363691, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.4834324
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 057da5ababbe90d409adef73ec1f5370, type: 3}

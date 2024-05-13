@@ -223,5 +223,7 @@ public class PlayerController : MonoBehaviour
         
         //Play the particle system
         GetComponents<ParticleSystemController>()[1].StartSystem();
+        
+        //TODO: IMPLEMENT AOE
     }
 }
