@@ -63,15 +63,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //Change the target movement speed based on the input
-        targetMovementSpeed = movementSpeed * Input.GetAxis("Horizontal");
+        //Change the target movement speed based on the input; switches input mode based on which direction gravity is
+        //If Houston is upside down, flip the directions of the horizontal movement
+        targetMovementSpeed = _c.gravityDirection.y != 0
+            ? movementSpeed * Input.GetAxis("Horizontal") * -_c.gravityDirection.y
+            : movementSpeed * Input.GetAxis("Vertical") * _c.gravityDirection.x;
         
         //Update the direction of the player
-        if (Input.GetAxis("Horizontal") != 0)
-        {
+        //Possibly make this logic better?
+        if ((_c.gravityDirection.y != 0 && Input.GetAxis("Horizontal") != 0) || (_c.gravityDirection.y == 0 && Input.GetAxis("Vertical") != 0))
             transform.localScale = new Vector3(Mathf.Sign(targetMovementSpeed), 1, 1);
-        }
-        
+
         //If the key is pressed to jump
         if (Input.GetButtonDown("Jump"))
         {
