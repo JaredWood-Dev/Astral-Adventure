@@ -22,10 +22,17 @@ public class PlayerController : MonoBehaviour
     [Header("Combat Movement")] 
     public bool isGravSlam;
     public float gravitySlamPower;
+    public float fallTime; //How long the player has been performing the gravity slam. Used for damage calculations
+
+    public float breathPower; //The launch power of Houston's singularity breath
+    public float breathDistance;
+    public float breathCooldownDuration;
+    private float _breathCooldownTimer;
     
     private Rigidbody2D _rb;
     private Creature _c;
     private Animator _animator;
+    private Camera _mainCamera;
     
     //TODO: IMPLEMENT SINGULARITY BREATH
     private void Start()
@@ -33,6 +40,7 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _c = GetComponent<Creature>();
+        _mainCamera = (Camera)FindObjectOfType(typeof(Camera));
     }
 
     private void FixedUpdate()
@@ -66,10 +74,10 @@ public class PlayerController : MonoBehaviour
         //Change the target movement speed based on the input; switches input mode based on which direction gravity is
         //If Houston is upside down, flip the directions of the horizontal movement
         targetMovementSpeed = _c.gravityDirection.y != 0
-            ? movementSpeed * Input.GetAxis("Horizontal") * -_c.gravityDirection.y
-            : movementSpeed * Input.GetAxis("Vertical") * _c.gravityDirection.x;
-        
-        //Update the direction of the player
+                ? movementSpeed * Input.GetAxis("Horizontal") * -_c.gravityDirection.y
+                : movementSpeed * Input.GetAxis("Vertical") * _c.gravityDirection.x;
+
+            //Update the direction of the player
         //Possibly make this logic better?
         if ((_c.gravityDirection.y != 0 && Input.GetAxis("Horizontal") != 0) || (_c.gravityDirection.y == 0 && Input.GetAxis("Vertical") != 0))
             transform.localScale = new Vector3(Mathf.Sign(targetMovementSpeed), 1, 1);
@@ -103,6 +111,10 @@ public class PlayerController : MonoBehaviour
         
         //Update the vector based on your current movement
         movementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        
+        //Check for if the player activates Houston's gravity breath
+        if (Input.GetButtonDown("Fire3"))
+            SingularityBreath();
     }
 
     public void MoveCharacter()
@@ -186,6 +198,10 @@ public class PlayerController : MonoBehaviour
     {
         _jumpBufferTimer -= Time.fixedDeltaTime;
         _coyoteTimer -= Time.fixedDeltaTime;
+        
+        //If a gravity slam is being performed, increment the slam timer
+        if (isGravSlam)
+            fallTime += Time.fixedDeltaTime;
     }
 
     //Begins the gravity slam move
@@ -215,11 +231,16 @@ public class PlayerController : MonoBehaviour
         
         //Update the animator
         _animator.SetBool("gravSlam", false);
+        
+        //Empty the fall timer
+        fallTime = 0;
     }
 
     //Handles the effects of landing while performing a gravity slam
     void LandGravitySlam()
     {
+        //Use the fallTime variable
+        
         //Update necessary changes to stop performing a gravity slam.
         EndGravitySlam();
         
@@ -227,5 +248,38 @@ public class PlayerController : MonoBehaviour
         GetComponents<ParticleSystemController>()[1].StartSystem();
         
         //TODO: IMPLEMENT AOE
+    }
+
+    //Houston's breath weapon, a breath that can launch him and launch enemies.
+    void SingularityBreath()
+    {
+        //Play the particle system
+        ParticleSystemController gravityBreathSystem = GetComponents<ParticleSystemController>()[2];
+        gravityBreathSystem.StartSystem();
+        
+        //Next, get the direction of the mouse & Angle the particle system
+        Vector3 mousePos = Input.mousePosition;
+        Vector2 worldMousePos = _mainCamera.ScreenToWorldPoint(mousePos);
+        float diffX = worldMousePos.x - gameObject.transform.position.x;
+        float diffY = worldMousePos.y - gameObject.transform.position.y;
+        float rot = Mathf.Atan2(diffY,diffX);
+        rot = rot * Mathf.Rad2Deg;
+        
+        //Rotate the particle system accordingly
+        gravityBreathSystem.targetSystem.transform.rotation = Quaternion.AngleAxis(rot, Vector3.forward);
+
+        //Apply AOE damage
+        //TODO:IMPLEMENT ATTACK SYSTEM
+        //IF CREATURES ARE CLOSE TO HOUSTON, LAUNCH THEM BACK BASED ON DISTANCE
+        
+        //Raycast Out to mouse
+        Vector2 breathDirection = new Vector2(diffX, diffY);
+        bool breathRay = Physics2D.Raycast(gameObject.transform.position, breathDirection.normalized, breathDistance, 1 << 7);
+
+        Vector2 breathForce = -breathDirection.normalized * (breathPower * 100);
+        print(breathForce);
+        //If we hit the ground, launch the player in the opposite direction
+        if (breathRay)
+            _rb.AddForce(breathForce, ForceMode2D.Impulse);
     }
 }
