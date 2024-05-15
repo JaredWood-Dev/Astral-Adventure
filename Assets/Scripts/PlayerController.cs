@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public float gravitySlamPower;
     public float fallTime; //How long the player has been performing the gravity slam. Used for damage calculations
 
+    [Header("Breath Weapon")]
     public float breathPower; //The launch power of Houston's singularity breath
     public float breathDistance;
     public float breathCooldownDuration;
@@ -112,8 +113,8 @@ public class PlayerController : MonoBehaviour
         //Update the vector based on your current movement
         movementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
-        //Check for if the player activates Houston's gravity breath
-        if (Input.GetButtonDown("Fire3"))
+        //Check for if the player activates Houston's gravity breath and the weapon is not on cooldown
+        if (Input.GetButtonDown("Fire3") && _breathCooldownTimer < 0)
             SingularityBreath();
     }
 
@@ -132,8 +133,9 @@ public class PlayerController : MonoBehaviour
         if (!onGround)
             f *= 0.25f;
         
-            //Apply the force to the character
-        _rb.AddForce(f);
+        //Apply the force to the character
+        if (onGround || (!onGround && Input.GetAxis("Horizontal") != 0 && _c.gravityDirection.y != 0) || (!onGround && Input.GetAxis("Vertical") != 0 && _c.gravityDirection.x != 0))
+            _rb.AddForce(f);
         
         //Animate the player
         if (vVector.x != 0)
@@ -198,6 +200,7 @@ public class PlayerController : MonoBehaviour
     {
         _jumpBufferTimer -= Time.fixedDeltaTime;
         _coyoteTimer -= Time.fixedDeltaTime;
+        _breathCooldownTimer -= Time.deltaTime;
         
         //If a gravity slam is being performed, increment the slam timer
         if (isGravSlam)
@@ -253,6 +256,12 @@ public class PlayerController : MonoBehaviour
     //Houston's breath weapon, a breath that can launch him and launch enemies.
     void SingularityBreath()
     {
+        //Update the cooldown
+        _breathCooldownTimer = breathCooldownDuration;
+        
+        //If we use the breath., we are most likely not on the ground anymore
+        onGround = false;
+        
         //Play the particle system
         ParticleSystemController gravityBreathSystem = GetComponents<ParticleSystemController>()[2];
         gravityBreathSystem.StartSystem();
@@ -277,7 +286,6 @@ public class PlayerController : MonoBehaviour
         bool breathRay = Physics2D.Raycast(gameObject.transform.position, breathDirection.normalized, breathDistance, 1 << 7);
 
         Vector2 breathForce = -breathDirection.normalized * (breathPower * 100);
-        print(breathForce);
         //If we hit the ground, launch the player in the opposite direction
         if (breathRay)
             _rb.AddForce(breathForce, ForceMode2D.Impulse);
