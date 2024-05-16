@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour
     private Creature _c;
     private Animator _animator;
     private Camera _mainCamera;
+
+    private AudioSource _runSound;
+    private AudioSource _jumpSound;
+    private AudioSource _breathSound;
+    private AudioSource _slamSound;
     
     //TODO: IMPLEMENT SINGULARITY BREATH
     private void Start()
@@ -42,6 +47,13 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _c = GetComponent<Creature>();
         _mainCamera = (Camera)FindObjectOfType(typeof(Camera));
+        
+        //Assign sound sources
+        _runSound = GetComponents<AudioSource>()[3];
+        _jumpSound = GetComponents<AudioSource>()[2];
+        _breathSound = GetComponents<AudioSource>()[1];
+        _slamSound = GetComponents<AudioSource>()[0];
+        
     }
 
     private void FixedUpdate()
@@ -142,16 +154,25 @@ public class PlayerController : MonoBehaviour
         {
             //Moving Animation
             _animator.SetBool("directionPressed", true);
+            
+            //Moving Sound effect
+            _runSound.Play();
         }
         else
         {
             //Not Moving Animation
             _animator.SetBool("directionPressed", false);
+            
+            //Stop the moving sound effect
+            _runSound.Stop();
         }
     }
 
     public void Jump()
     {
+        //Play the jump sound effect
+        _jumpSound.Play();
+        
         //When we jump, we want to apply an impulse in the opposite direction of gravity
         _rb.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
         
@@ -242,6 +263,9 @@ public class PlayerController : MonoBehaviour
     //Handles the effects of landing while performing a gravity slam
     void LandGravitySlam()
     {
+        //Play the sound effect
+        _slamSound.Play();
+        
         //Use the fallTime variable
         
         //Update necessary changes to stop performing a gravity slam.
@@ -256,6 +280,9 @@ public class PlayerController : MonoBehaviour
     //Houston's breath weapon, a breath that can launch him and launch enemies.
     void SingularityBreath()
     {
+        //Play the sound effect
+        _breathSound.Play();
+        
         //Update the cooldown
         _breathCooldownTimer = breathCooldownDuration;
         
