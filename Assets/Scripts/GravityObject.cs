@@ -8,7 +8,7 @@ public class GravityObject : MonoBehaviour
     //This game may play with Gravity fields and directions, as such every creature needs to consider the direction of gravity.
     [Header("Gravity")] 
     //This vector stores the current direction of the gravity.
-    public Vector2 gravityDirection;
+    public Vector2 gravityDirection = new(0,-1);
     public float defaultGravityAcceleration;
     public float currentGravityAcceleration;
 
