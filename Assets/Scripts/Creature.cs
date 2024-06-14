@@ -76,7 +76,7 @@ public class Creature : GravityObject
     public void HitCreature(int damageAmount, DamageTypes type, Vector2 knockBack)
     {
         //Adjusts the hit-points
-        ChangeHitPoints(damageAmount, type);
+        ChangeHitPoints(-damageAmount, type);
         
         //Apply the knock-back
         if (GetComponent<Rigidbody2D>())
