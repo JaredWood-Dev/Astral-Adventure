@@ -370,8 +370,9 @@ public class PlayerController : MonoBehaviour
         //print(transform.right * transform.localScale.x);
         if (target)
         {
-            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.right * (transform.localScale.x * knockBackPower));
+            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.right * (transform.localScale.x * knockBackPower * 100));
         }
+        _slamSound.Play();
     }
 
     void UpperCut()
@@ -380,7 +381,8 @@ public class PlayerController : MonoBehaviour
         //print(transform.right * transform.localScale.x);
         if (target)
         {
-            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.up * (500 * knockBackPower));
+            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.up * (500 * knockBackPower) + (transform.right * (transform.localScale.x * knockBackPower * 100)));
         }
+        _breathSound.Play();
     }
 }
