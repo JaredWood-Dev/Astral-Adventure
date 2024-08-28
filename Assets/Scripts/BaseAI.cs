@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ public class BaseAI : MonoBehaviour
     private void Start()
     {
         InvokeRepeating("TargetCreature", 0.5f, 0.5f);
+        _possibleTargets = new List<GameObject>();
     }
 
 
@@ -34,35 +36,37 @@ public class BaseAI : MonoBehaviour
      */
     void TargetCreature()
     {
-        print("Attempting to find a Target");
-        print(GameObject.FindGameObjectsWithTag("Player").Length);
-        foreach (var itag in targetableTags)
+        _possibleTargets.Clear();
+        //print("Attempting to find a Target");
+        foreach (var _tag in targetableTags)
         {
-            if(GameObject.FindGameObjectsWithTag(itag).Length > 0)
-                _possibleTargets.AddRange(GameObject.FindGameObjectsWithTag(itag));
+            foreach (var creature in GameObject.FindGameObjectsWithTag(_tag))
+            {
+                if (Vector2.Distance(gameObject.transform.position, creature.transform.position) < aggressionDistance)
+                {
+                    _possibleTargets.Add(creature.gameObject);
+                }
+            }
         }
         
-        float targetDistance;
-        float smallestDistance = 0;
-        GameObject closestTarget = null;
-        //Choose the closest target, if it is within range.
+        if (_possibleTargets.Count < 1)
+        {
+            target = null;
+            return;
+        }
+
+        GameObject closestCreature = null;
+        float min = Single.PositiveInfinity;
         foreach (var creature in _possibleTargets)
         {
-            targetDistance = Vector2.Distance(gameObject.transform.position, creature.transform.position);
-            if (targetDistance > smallestDistance)
+            float dist = Vector2.Distance(gameObject.transform.position, creature.transform.position);
+            if (dist < min)
             {
-                smallestDistance = targetDistance;
-                closestTarget = creature;
+                min = dist;
+                closestCreature = creature;
             }
         }
 
-        if (smallestDistance > aggressionDistance)
-        {
-            target = null;
-        }
-        else
-        {
-            target = closestTarget;
-        }
+        target = closestCreature;
     }
 }
