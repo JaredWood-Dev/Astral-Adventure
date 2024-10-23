@@ -13,6 +13,9 @@ public class Creature : GravityObject
     [Header("Combat")]
     //The amount of HP a creature has
     public float hitPoints;
+    [Range(-1,1)]
+    //How well the creature resists knockback. When struck the creature will multiply the distance by one minus this number
+    public float knockBackResistance;
 
     //These reflect a creatures natural resistance or alteration to certain types of damage
     [Header("Damage Adjustments")] 
@@ -65,8 +68,19 @@ public class Creature : GravityObject
     //Kills the creature when called
     public void KillCreature()
     {
-        //More elegantly later, currently it simply deletes the creature
+        //More elegantly later, currently it simply deletes the creature747
         Destroy(gameObject);
+    }
+    
+    //Damages the creature by the specified amount and adds knockback.
+    public void HitCreature(int damageAmount, DamageTypes type, Vector2 knockBack)
+    {
+        //Adjusts the hit-points
+        ChangeHitPoints(-damageAmount, type);
+        
+        //Apply the knock-back
+        if (GetComponent<Rigidbody2D>())
+            GetComponent<Rigidbody2D>().AddForce(knockBack * (1 - knockBackResistance));
     }
     
 }
