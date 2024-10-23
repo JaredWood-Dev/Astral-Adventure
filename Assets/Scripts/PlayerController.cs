@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -23,6 +24,13 @@ public class PlayerController : MonoBehaviour
     public bool isGravSlam;
     public float gravitySlamPower;
     public float fallTime; //How long the player has been performing the gravity slam. Used for damage calculations
+
+    [Header("Combat")] 
+    public int attackDamage;
+    public float comboTime; //The window of time for a combo to be performed
+    private float _comboTimer;
+    private int _comboStrikes; //The amount of strikes that have been made in the combo
+    public float knockBackPower;
 
     [Header("Breath Weapon")]
     public float breathPower; //The launch power of Houston's singularity breath
@@ -80,6 +88,12 @@ public class PlayerController : MonoBehaviour
         {
             EndGravitySlam();
         }
+
+        //If we let the combo time expire, we lose the combo
+        if (_comboTimer <= 0)
+            _comboStrikes = 0;
+        
+        //Debug.DrawRay(transform.position, transform.right * (transform.localScale.x * 1000), Color.cyan);
     }
 
     private void Update()
@@ -128,6 +142,10 @@ public class PlayerController : MonoBehaviour
         //Check for if the player activates Houston's gravity breath and the weapon is not on cooldown
         if (Input.GetButtonDown("Fire3") && _breathCooldownTimer < 0)
             SingularityBreath();
+        
+        //Handle player input for attacking
+        if (Input.GetButtonDown("Fire1"))
+            Attack();
     }
 
     public void MoveCharacter()
@@ -222,6 +240,7 @@ public class PlayerController : MonoBehaviour
         _jumpBufferTimer -= Time.fixedDeltaTime;
         _coyoteTimer -= Time.fixedDeltaTime;
         _breathCooldownTimer -= Time.deltaTime;
+        _comboTimer -= Time.deltaTime;
         
         //If a gravity slam is being performed, increment the slam timer
         if (isGravSlam)
@@ -316,5 +335,54 @@ public class PlayerController : MonoBehaviour
         //If we hit the ground, launch the player in the opposite direction
         if (breathRay)
             _rb.AddForce(breathForce, ForceMode2D.Impulse);
+    }
+
+    //Handles attacking
+    //When attacking one click results in a basic strike
+    //Three clicks in rapid succession result in a combo that upper cuts the enemy
+    void Attack()
+    {
+        //If we have no combo going, we want to do a basic strike and begin a combo
+        if (_comboTimer <= 0)
+        {
+            ThunderGauntletStrike();
+            _comboTimer = comboTime;
+            _comboStrikes++;
+        }
+        //If we have a combo going but not enough strikes for a uppercut also just do a thunder gauntlet strike
+        else if (_comboTimer > 0 && _comboStrikes < 2)
+        {
+            ThunderGauntletStrike();
+            _comboStrikes++;
+        }
+        //If we have a combo going and enough strikes, we upper cut then end the combo
+        else if (_comboTimer > 0 && _comboStrikes >= 2)
+        {
+            UpperCut();
+            _comboStrikes = 0;
+            _comboTimer = 0;
+        }
+    }
+
+    void ThunderGauntletStrike()
+    {
+        RaycastHit2D target = Physics2D.Raycast(transform.position, transform.right * transform.localScale.x, 5, 1 << 8);
+        //print(transform.right * transform.localScale.x);
+        if (target)
+        {
+            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.right * (transform.localScale.x * knockBackPower * 100));
+        }
+        _slamSound.Play();
+    }
+
+    void UpperCut()
+    {
+        RaycastHit2D target = Physics2D.Raycast(transform.position, transform.right * transform.localScale.x, 5, 1 << 8);
+        //print(transform.right * transform.localScale.x);
+        if (target)
+        {
+            target.collider.gameObject.GetComponent<Creature>().HitCreature(attackDamage, DamageTypes.Thunder, transform.up * (500 * knockBackPower) + (transform.right * (transform.localScale.x * knockBackPower * 100)));
+        }
+        _breathSound.Play();
     }
 }
